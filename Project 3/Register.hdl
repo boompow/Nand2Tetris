@@ -1,0 +1,81 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/Register.hdl
+/**
+ * 16-bit register:
+ * If load is asserted, the register's value is set to in;
+ * Otherwise, the register maintains its current value:
+ * if (load(t)) out(t+1) = int(t), else out(t+1) = out(t)
+ */
+CHIP Register {
+    IN in[16], load;
+    OUT out[16];
+
+    PARTS:
+    //Although this can be built with Bit, I decided to build it from the Mux and DFF
+    Mux(a=outDff0 ,  b=in[0]  , sel=load , out=outMux0 );
+    DFF(in=outMux0 , out=outDff0 );
+    Or(a=outDff0 , b=outDff0 , out=out[0] );
+
+    Mux(a=outDff1 ,  b=in[1]  , sel=load , out=outMux1 );
+    DFF(in=outMux1 , out=outDff1 );
+    Or(a=outDff1 , b=outDff1 , out=out[1] );
+
+    Mux(a=outDff2 ,  b=in[2]  , sel=load , out=outMux2 );
+    DFF(in=outMux2 , out=outDff2 );
+    Or(a=outDff2 , b=outDff2 , out=out[2] );
+
+    Mux(a=outDff3 ,  b=in[3]  , sel=load , out=outMux3 );
+    DFF(in=outMux3 , out=outDff3 );
+    Or(a=outDff3 , b=outDff3 , out=out[3] );
+
+    Mux(a=outDff4 ,  b=in[4]  , sel=load , out=outMux4 );
+    DFF(in=outMux4 , out=outDff4 );
+    Or(a=outDff4 , b=outDff4 , out=out[4] );
+
+    Mux(a=outDff5 ,  b=in[5]  , sel=load , out=outMux5 );
+    DFF(in=outMux5 , out=outDff5 );
+    Or(a=outDff5 , b=outDff5 , out=out[5] );
+
+    Mux(a=outDff6 ,  b=in[6]  , sel=load , out=outMux6 );
+    DFF(in=outMux6 , out=outDff6 );
+    Or(a=outDff6 , b=outDff6 , out=out[6] );
+
+    Mux(a=outDff7 ,  b=in[7]  , sel=load , out=outMux7 );
+    DFF(in=outMux7 , out=outDff7 );
+    Or(a=outDff7 , b=outDff7 , out=out[7] );
+
+    Mux(a=outDff8 ,  b=in[8]  , sel=load , out=outMux8 );
+    DFF(in=outMux8 , out=outDff8 );
+    Or(a=outDff8 , b=outDff8 , out=out[8] );
+
+    Mux(a=outDff9 ,  b=in[9]  , sel=load , out=outMux9 );
+    DFF(in=outMux9 , out=outDff9 );
+    Or(a=outDff9 , b=outDff9 , out=out[9] );
+
+    Mux(a=outDff10 , b=in[10] , sel=load , out=outMux10 );
+    DFF(in=outMux10 , out=outDff10 );
+    Or(a=outDff10 , b=outDff10 , out=out[10] );
+
+    Mux(a=outDff11 , b=in[11] , sel=load , out=outMux11 );
+    DFF(in=outMux11 , out=outDff11 );
+    Or(a=outDff11 , b=outDff11 , out=out[11] );
+
+    Mux(a=outDff12 , b=in[12] , sel=load , out=outMux12 );
+    DFF(in=outMux12 , out=outDff12 );
+    Or(a=outDff12 , b=outDff12 , out=out[12] );
+
+    Mux(a=outDff13 , b=in[13] , sel=load , out=outMux13 );
+    DFF(in=outMux13 , out=outDff13 );
+    Or(a=outDff13 , b=outDff13 , out=out[13] );
+
+    Mux(a=outDff14 , b=in[14] , sel=load , out=outMux14 );
+    DFF(in=outMux14 , out=outDff14 );
+    Or(a=outDff14 , b=outDff14 , out=out[14] );
+
+    Mux(a=outDff15 , b=in[15] , sel=load , out=outMux15 );
+    DFF(in=outMux15 , out=outDff15 );
+    Or(a=outDff15 , b=outDff15 , out=out[15] );
+
+}

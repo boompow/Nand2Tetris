@@ -1,0 +1,29 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/Bit.hdl
+/**
+ * 1-bit register:
+ * If load is asserted, the register's value is set to in;
+ * Otherwise, the register maintains its current value:
+ * if (load(t)) out(t+1) = in(t), else out(t+1) = out(t)
+ */
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    // we can't directly use out in internal pin a, so we use outDff instead
+    Mux(a=outDff , b=in , sel=load , out=outMux );
+    DFF(in=outMux , out=outDff );
+
+
+    //We know out is the same as outDff, but the program doesn't know that, we can tell it in several ways
+    //using And gate
+    //And(a=outDff , b=outDff , out=out );
+
+    //using Or gate
+    Or(a=outDff , b=outDff , out=out );
+
+    
+}
