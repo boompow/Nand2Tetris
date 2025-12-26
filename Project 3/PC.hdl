@@ -1,0 +1,40 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/PC.hdl
+/**
+ * A 16-bit counter.
+ * if      reset(t): out(t+1) = 0
+ * else if load(t):  out(t+1) = in(t)
+ * else if inc(t):   out(t+1) = out(t) + 1
+ * else              out(t+1) = out(t)
+ */
+CHIP PC {
+    IN in[16], reset, load, inc;
+    OUT out[16];
+    
+    PARTS:
+    //since there are 4 things to select and if you are thinking of Mux the only handle 1, so
+    //the solution is nesting them
+    
+    //incrementer
+    Inc16(in=outDff , out=outPlusOne );
+    Mux16(a=outDff , b=outPlusOne , sel=inc , out=incOut );
+
+    //load
+    Mux16(a=incOut , b=in , sel=load , out=loadOut );
+
+    //reset
+    Mux16(a=loadOut , b=false , sel=reset , out=resetOut );
+
+    //if any of the inc, load, reset are 1, the register load should be 1
+    Or(a=load , b=reset , out=out1 );
+    Or(a=out1 , b=inc , out=loadPC );
+
+    Register(in=resetOut , load=loadPC , out=outDff );
+
+
+    And16(a=outDff , b=outDff , out=out );
+    
+    
+}
