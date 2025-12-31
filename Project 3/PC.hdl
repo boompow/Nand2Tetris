@@ -16,6 +16,9 @@ CHIP PC {
     PARTS:
     //since there are 4 things to select and if you are thinking of Mux the only handle 1, so
     //the solution is nesting them
+
+    //I really struggled to find this solution, before I found nesting, I was trying to find ways to construct a Mux that
+    // can handle 4 possible values like a 2-bit sel representing the reset, load, inc, or the out(t)
     
     //incrementer
     Inc16(in=outDff , out=outPlusOne );
