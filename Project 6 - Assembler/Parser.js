@@ -99,7 +99,7 @@ class Parse{
                 })
             }
 
-            return console.log(parsedInstruction)
+            return parsedInstruction
 
             
         } catch (error) {
