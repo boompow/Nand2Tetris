@@ -4,7 +4,7 @@ import os from "os"
 
 const AsmFile = path.join(import.meta.dirname, "File.asm")
 
-class Parse{
+export class Parse{
     constructor(AsmFile){
         this.AsmFile = AsmFile;
     }
@@ -71,7 +71,8 @@ class Parse{
 
                         // dest 
                         if(instruction.indexOf("=") !== -1){
-                            dest = instruction.slice(0, instruction.indexOf("="))
+                            const destUnsorted = instruction.slice(0, instruction.indexOf("="))
+                            dest = destUnsorted.split("").sort().join()
                         }
                         if(instruction.indexOf("=") !== -1 && instruction.indexOf(";") === -1){
                             comp = instruction.slice(instruction.indexOf("=")+1)
@@ -105,10 +106,16 @@ class Parse{
         } catch (error) {
             console.log(error)
         }
-
     }
+
+    symbol(item){
+        // check if the instruction is a symbol (xxx) or A-instruction @xxx
+        if(item[0] === "@"){
+            return item.slice(1)
+        }else if(item[0] === "(" && item[item.length - 1] === ")"){
+            return item.slice(1, item.length-1)
+        }else{
+            return null;
+        }
+     }
 }
-
-
-const parse = new Parse(AsmFile)
-parse.instructionType()

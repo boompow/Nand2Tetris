@@ -1,4 +1,4 @@
-const symbol_tree = {
+const code_module = {
     // dest 
     dest:{
     "": "000",
@@ -55,8 +55,16 @@ const symbol_tree = {
     "M-D": "1000111",
     "D&M": "1000000",
     "D|M": "1010101"
-    }
+    },
+
+    // 
 
 }
 
-
+export default function CtoBinaryMap(type, code){
+    if(Object.hasOwn(code_module[type], code)){
+        return code_module[type][code]
+    }else{
+        return null;
+    }
+}
