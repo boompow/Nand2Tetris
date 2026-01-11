@@ -16,10 +16,18 @@ class Assembler extends Parse{
         const binaryInstruction = []
         parsedInstruction.map((instruction, index)=>{
             if(instruction.type === "A_INSTRUCTION"){
-                if(this.symbolTable.isNumber(instruction.value.slice(1))){
-                    
+                const value = instruction.value.slice(1);
+                if(this.symbolTable.isNumber(value)){
+                    const valueBinary = value.toString(2)
+                    const A_instruction =  "0" + valueBinary.slice(0, 15)
+                    binaryInstruction.push({
+                        line:index,
+                        instruction: A_instruction
+                    })
                 }
-
+            }
+            else if(instruction.type === "C_INSTRUCTION"){
+                
             }
 
         })
