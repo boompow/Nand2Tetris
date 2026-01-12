@@ -1,6 +1,5 @@
 import { Parse } from "./Parser.js";
 import {CtoBinaryMap} from "./CodeModule.js";
-import { SymbolTable } from "./SymbolTable.js";
 import path from "path"
 import { writeFile } from "fs/promises";
 
@@ -9,15 +8,17 @@ const AsmFile = path.join(import.meta.dirname, "File.asm")
 class Assembler extends Parse{
     constructor(AsmFile){
         super(AsmFile)
-        this.symbolTable = new SymbolTable();
     }
 
     async convertToBinary(){
+        try {
+            // second pass
         const parsedInstruction = await this.instructionType()
         const binaryInstruction = []
         for(const instruction of parsedInstruction){
             if(instruction.type === "A_INSTRUCTION"){
                 const value = instruction.value.slice(1);
+                if (value > 32767) throw new Error("Constant out of range")
                 if(this.symbolTable.isNumber(value)){
                     const valueBinary = value.toString(2).padStart(15, "0")
                     const A_instruction = "0" + valueBinary
@@ -43,13 +44,12 @@ class Assembler extends Parse{
                 const C_instruction = "111" + comp + dest + jump
                 binaryInstruction.push(C_instruction)
             }
-            else if(instruction.type === "L_INSTRUCTION"){
-                // const value = instruction.value.slice(1, item.length-1)
-
-            }
 
         }
         return binaryInstruction
+        } catch (error) {
+            throw error;
+        }
     }
 
     async writeHack(){
@@ -59,7 +59,7 @@ class Assembler extends Parse{
             await writeFile("File.hack", instruction)
             console.log("File.hack created successfully")
         } catch (error) {
-            console.log(error)
+            throw error;
         }
     }
 }

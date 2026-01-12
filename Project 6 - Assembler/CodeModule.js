@@ -56,9 +56,6 @@ const code_module = {
     "D&M": "1000000",
     "D|M": "1010101"
     },
-
-    // 
-
 }
 
 export function CtoBinaryMap(type, code){
