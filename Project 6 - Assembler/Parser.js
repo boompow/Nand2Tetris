@@ -49,7 +49,6 @@ export class Parse{
                 instructions.map((instruction, i)=>{
                     if(instruction[0] === "@"){
                         const object = {
-                            line: i,
                             type: "A_INSTRUCTION",
                             value:instruction
                         };
@@ -58,7 +57,6 @@ export class Parse{
                     }
                     else if(instruction[0] === "(" && instruction[instruction.length-1] === ")"){
                         const object = {
-                            line: i,
                             type: "L_INSTRUCTION",
                             value:instruction
                         };
@@ -87,7 +85,6 @@ export class Parse{
                             jump = instruction.slice(instruction.indexOf(";")+1)
                         }
                         const object = {
-                            line: i,
                             type: "C_INSTRUCTION",
                             value:instruction,
                             dest: dest,
@@ -107,15 +104,4 @@ export class Parse{
             console.log(error)
         }
     }
-
-    symbol(item){
-        // check if the instruction is a symbol (xxx) or A-instruction @xxx
-        if(item[0] === "@"){
-            return item.slice(1)
-        }else if(item[0] === "(" && item[item.length - 1] === ")"){
-            return item.slice(1, item.length-1)
-        }else{
-            return null;
-        }
-     }
 }

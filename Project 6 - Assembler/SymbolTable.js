@@ -41,11 +41,13 @@ export class SymbolTable{
         if(!Object.hasOwn(this.table, symbol) && !this.isNumber(symbol)){
             if(address == null){
                 this.table[symbol] = this.nextAddress++
+                return this.table[symbol]
             }else{
                 this.table[symbol] = address
+                return this.table[symbol]
             }
         }else{
-            console.log("Symbol already has address")
+            throw new Error("Symbol already has an address")
         }
     }
 
@@ -57,7 +59,7 @@ export class SymbolTable{
         if(Object.hasOwn(this.table, symbol)){
             return this.table[symbol]
         }else{
-            console.log("Symbol doesn't exist")
+           throw new Error("Symbol does not have an address")
         }
     }
 }

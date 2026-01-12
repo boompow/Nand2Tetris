@@ -61,10 +61,12 @@ const code_module = {
 
 }
 
-export default function CtoBinaryMap(type, code){
-    if(Object.hasOwn(code_module[type], code)){
-        return code_module[type][code]
+export function CtoBinaryMap(type, code){
+    let key;
+    code === null ? key = "" : key = code;
+    if(Object.hasOwn(code_module[type], key)){
+        return code_module[type][key]
     }else{
-        return null;
+        throw new Error("Symbol is not registered")
     }
 }
