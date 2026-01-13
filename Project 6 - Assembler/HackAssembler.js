@@ -1,13 +1,11 @@
 import { Parse } from "./Parser.js";
 import {CtoBinaryMap} from "./CodeModule.js";
-import path from "path"
 import { writeFile } from "fs/promises";
-
-const AsmFile = path.join(import.meta.dirname, "File.asm")
+import path from "path";
 
 class Assembler extends Parse{
-    constructor(AsmFile){
-        super(AsmFile)
+    constructor(AsmFileName){
+        super(AsmFileName)
     }
 
     async convertToBinary(){
@@ -20,7 +18,8 @@ class Assembler extends Parse{
                 const value = instruction.value.slice(1);
                 if (value > 32767) throw new Error("Constant out of range")
                 if(this.symbolTable.isNumber(value)){
-                    const valueBinary = value.toString(2).padStart(15, "0")
+                    const number = Number(value)
+                    const valueBinary = number.toString(2).padStart(15, "0")
                     const A_instruction = "0" + valueBinary
                     binaryInstruction.push(A_instruction)
                 }else if(!this.symbolTable.isNumber(value)){
@@ -56,7 +55,13 @@ class Assembler extends Parse{
         try {
             const instructionArray = await this.convertToBinary()
             const instruction = instructionArray.join("\n")
-            await writeFile("File.hack", instruction)
+
+            // setting up the write file path
+            const {name} = path.parse(this.AsmFileName)
+            const binaryFilesDir = "Binary Files" // the directory for binary files
+            const writePath = path.join(binaryFilesDir, `${name}.hack`)
+
+            await writeFile(writePath, instruction)
             console.log("File.hack created successfully")
         } catch (error) {
             throw error;
@@ -64,5 +69,5 @@ class Assembler extends Parse{
     }
 }
 
-const assemble = new Assembler(AsmFile)
+const assemble = new Assembler("Assembly Files/RectL")
 assemble.writeHack()

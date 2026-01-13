@@ -2,33 +2,40 @@ import fs from "fs/promises"
 import path from "path"
 import os from "os"
 import { SymbolTable } from "./SymbolTable.js";
-
-const AsmFile = path.join(import.meta.dirname, "File.asm")
-
 export class Parse{
-    constructor(AsmFile){
-        this.AsmFile = AsmFile;
+    constructor(AsmFileName){
+        this.AsmFileName = AsmFileName;
         this.symbolTable = new SymbolTable()
+    }
+
+    async getAssemblyFile(){
+        const filePath = path.join(import.meta.dirname, `${this.AsmFileName}.asm`)
+        try {
+            await fs.access(filePath)
+            return filePath
+        } catch(error) {
+            throw error
+        }
     }
 
     async cleanInstruction(){
         try {
-            const asm = await fs.readFile(this.AsmFile, "utf-8")
+            const filePath = await this.getAssemblyFile()
+            const asm = await fs.readFile(filePath, "utf-8")
             //properly split the file contents based on the end of the line using os module so that it works in any OS
             // const asmList = asm.split(os.EOL) // this is fragile so 
             const asmList = asm.split(/\r?\n/)
-
             //from the list remove all the ignored texts like comments and white spaces
             if(asmList){
                 const newList = []
                 asmList.forEach(element => {
-                    if(element.length !== 0 && element.slice(0,2) !== "//"){ 
+                    const trimedElement = element.trim()
+                    if(trimedElement.length !== 0 && trimedElement.slice(0,2) !== "//"){ 
                         if(element.indexOf("//") !== -1 ){
-                            const cleanedElement = element.substring(0, element.indexOf("//")).trim()
+                            const cleanedElement = trimedElement.substring(0, element.indexOf("//")).trim()
                             newList.push(cleanedElement)
                         }else{
-                            const cleanedElement = element.trim()
-                            newList.push(cleanedElement)
+                            newList.push(trimedElement)
                         }            
                     }
                 });
@@ -51,7 +58,6 @@ export class Parse{
 
                 if(instruction[0] === "(" && instruction[instruction.length-1] === ")"){
                         const symbol = instruction.slice(1, instruction.length-1)
-
                         this.symbolTable.addEntry(symbol, ROMAddress)
                 }else{
                     instructionList.push(instruction)
@@ -63,7 +69,7 @@ export class Parse{
             return instructionList
 
         } catch (error) {
-            
+            throw error
         }
     }
 
